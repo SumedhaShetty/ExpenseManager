@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<title>Budget</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
+<link rel="stylesheet" href="{% static 'budget/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}">
+<body overflow="hidden" style="background-image: url('{% static 'images/budget2_img.jpg' %}'); background-size: cover;" data-aos="fade">
+	<div class="bg-image">
+	<div class="parent">
+		<div class="side-bar">
+			<ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="padding-top: 10px;">
+		        <li><a href="#category-section" class="nav-link" >Category</a></li>
+                <li><a href="#income-section" class="nav-link">Add Income</a></li>
+                <li><a href="#create-category-section" class="nav-link">Create Category</a></li>
+				<li><a href="#create-subcategory-section" class="nav-link">Create Subcategory</a></li>
+				<li><a href="{% url 'expense:analytics' %}" class="nav-link">Analytics</a></li>
+                <li><a href="{% url 'expense:timeline' %}" class="nav-link">Timeline</a></li>
+                <li><a href="{% url 'expense:calendarToday' %}" class="nav-link">Calendar</a></li>
+				<li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+            </ul>
+		</div>
+		
+		<div class="container" overflow-y:scroll >
+		<div class="page-title"><h1><strong>Budget</strong></h1></div>
+
+			<div id="category-section">
+				<h2 class="section-title mb-3">Category</h2>
+				<div class="card-grid" style="margin-bottom: 300px;">
+				{% for category in categories %}
+				<div class="card">
+					<div class="card-container">
+					<h4><b>{{ category.name }}</b></h4>
+					<h4>Sub-Category:</h4>
+					{% for subcategory in category.sub_category.all %}
+					<p>{{ subcategory.name }}</p>
+					{% endfor %} 
+					</div>
+				</div>
+				{% endfor %} 
+				</div>
+			</div>
+
+		
+			<div id="income-section" style="padding-top: 20px;">
+				<h2 class="section-title mb-3">Add Income </h2>
+					<div class="card">
+						<div class="single-card-container">
+
+						<form method="POST" action=" " enctype="multipart/form-data">
+						{% csrf_token %}
+						{{ income_form.as_p }}
+						{% if action == "create"%}
+						<input type="submit" class='card-button' value="Create Income" />
+						{% else %}
+						<input type="update" class='card-button' value="Update Income" />
+						{% endif %}
+						</form>
+						</div>
+					</div>
+			</div> 
+
+			<div id="create-category-section">
+				<h2 class="section-title mb-3">Create Category </h2>
+					<div class="card">
+						<div class="single-card-container">
+						<form method="POST" action=" " enctype="multipart/form-data">
+							{% csrf_token %}
+							{{ cat_form.as_p }}
+							{% if action == "create"%}
+							<input type="submit" class='card-button' value="Create Category" />
+							{% else %}
+							<input type="update" class='card-button' value="Update Category" />
+							{% endif %}
+						</form>
+						</div>
+					</div>
+			</div> 
+
+			<div id="create-subcategory-section">
+				<h2 class="section-title mb-3">Create Sub-Category </h2>
+					<div class="card">
+						<div class="single-card-container">
+							<form method="POST" action=" " enctype="multipart/form-data">
+								{% csrf_token %}
+								{{ subcat_form.as_p }}
+								{% if action == "create"%}
+								<input type="submit" class='card-button' value="Create Sub_Category" />
+								{% else %}
+								<input type="update" class='card-button' value="Update Sub_Category" />
+								{% endif %}
+								</form>
+						</div>
+					</div>
+			</div> 
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

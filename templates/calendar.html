@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="{% static 'budget/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calendar/css/calendar.css' %}" >
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+
+{% block csscontent %}
+{% endblock csscontent %}
+<!--
+	<link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href='{% static "/css/calendar.css" %}' />
+-->
+<body style="background-image: url('{% static 'images/calendar5_img.jpg' %}'); background-size: cover;">
+
+{% block content %}
+    <div class="float">
+        <div class="blank"></div>
+        <form action= "{% url 'expense:timeline' %}">
+            <button class="btn btn-black btn-outline-black ml-1 rounded-0" style="padding: 20px 50px 20px 50px">Go  to Timeline</button>
+        </form>
+    </div>
+
+    <div class="page">
+        <div class="elegant-calendar">
+            <div class="clearfix">
+                <div class="head-container">
+                    <div class="head-date">
+                        {{date}} {{month_name}}, {{year}}
+                    </div>
+                    <div class="control">
+                        <div class="arrows">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="pre-next">
+                                    <button name="pre"><i class="fa fa-arrow-left"></i></button>
+                                    <button name="next"><i class="fa fa-arrow-right"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        <table id="calendar" class="thead">
+            <thead>
+                <tr class="tableheader" style="color: #474747;">
+                    <div><th {% if day_no == 0 %}class="selected" {% endif %}>Mo</th></div>
+                    <div><th {% if day_no == 1 %}class="selected" {% endif %}>Tu</th></div>
+                    <div><th {% if day_no == 2 %}class="selected" {% endif %}>We</th></div>
+                    <div><th {% if day_no == 3 %}class="selected" {% endif %}>Th</th></div>
+                    <div><th {% if day_no == 4 %}class="selected" {% endif %}>Fr</th></div>
+                    <div><th {% if day_no == 5 %}class="selected" {% endif %}>Sa</th></div>
+                    <div><th {% if day_no == 6 %}class="selected" {% endif %}>Su</th></div>
+                </tr>
+            </thead>
+        <table>
+        <table class="dates">
+            <tbody>
+                <tr class="datecolumn">
+                    {% for j in gaps %}
+                        <div><td></td></div>
+                    {% endfor %}
+                    {% for j in dates %}
+                        <div>
+                            <td 
+                                {% if j == date %}
+                                    class="selected"  
+                                {% endif %}
+                            >
+                                <a 
+                                    href="{% url 'expense:calendar' date=j month=month year=year %}"
+                                >
+                                    {{j}}
+                                </a>
+                            </td>
+                        </div>
+                    {% endfor %}
+                </tr>   
+            </tbody>
+        </table>
+        </div>
+        <div class="dummy">
+            <div class="blank"></div>
+            <form action= '{% url "expense:calendarToday" %}'>
+                <button class="btn btn-black mr-1 rounded-0" style="padding: 15px 15px 15px 15px">Today</button>
+            </form>
+        </div>
+        </div>
+        <div class="heading">Expenditures</div>
+        <div class="days_data">
+            {% if day_dataset %}
+                {% for day_data in day_dataset %}
+                    <div class="card">
+                        <div class="single-card-container-search">
+                            <div class="day_data">
+                            <span class="time">{{ day_data.timestamp }}</span>  
+                            <h4><b>{{ day_data.sub_category }}</b></h4>
+                            <p><b>{{ day_data.spent }}</b></p>
+                            </div> 
+                        </div>
+                    </div>
+                {% endfor %} 
+        </div> 
+            {% else %}
+            <div class="none">
+                You have no Expenditures on this day.
+            </div>
+            {% endif %}
+        </div>
+        <div class="float">
+            <button id="myBtn" class="add">Add Expenditure</button>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+    <div class="pname">Add Expenditure</div>
+    <form method="POST">
+    {% csrf_token %}
+    <div class="row">
+    <div class="key"> Date:</div>
+    <input type="date" name="req_date" value="{{y}}-{{m}}-{{d}}">
+    <div class="value">
+    {{ form.as_p }}    
+    </div>
+    </div>
+    <input id="reset" class="sub" type="submit" name="addexpense">
+    </form>
+  </div>
+</div>
+  {% endblock content %}
+
+
+    {% block script %}
+    <script>
+        var modal = document.getElementById("myModal");
+
+        var btn = document.getElementById("myBtn");
+
+
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+        modal.style.display = "block";
+        console.log("Sumedha");
+        }
+
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+</script>
+  {% endblock script %}
+
+    
+</body>
+</html>

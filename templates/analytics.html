@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<title>Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'budget/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}">
+
+<body overflow="hidden" style="background-image: url('{% static 'images/analytics_img.jpg' %}'); background-size: cover;" data-aos="fade">
+  <div class="parent">
+		<div class="side-bar">
+			<ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+        <li><a href="#categories-section" class="nav-link">Category</a></li>
+        <li><a href="#month-section" class="nav-link">Monthly Balance</a></li>
+        <li><a href="#year-section" class="nav-link">Annual Balance</a></li>
+        <li><a href="{% url 'expense:budget' %}" class="nav-link">Budget</a></li>
+        <li><a href="{% url 'expense:timeline' %}" class="nav-link">Timeline</a></li>
+        <li><a href="{% url 'expense:calendarToday' %}" class="nav-link">Calendar</a></li>
+				<li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+      </ul>
+		</div>
+		
+		<div class="container" overflow-y:scroll>
+		<div class="page-title" ><h1><strong>Analytics</strong></h1></div>    
+  <div>
+    <h2 class="section-title mb-3" style="color: white; text-shadow: 2px 2px #474747;">Category-Wise Distribution</h2>  
+    <div class="graph-1">
+      <div class="graph-container">
+      <h3 class="section-sub-title">GRAPH</h3>
+
+        <div id="graph-chart" style="width: 75%;">
+          <canvas id="donut-chart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script>
+          var config = {
+            type: 'doughnut',
+            data: {
+              datasets: [{
+                data: {{ data2|safe }},
+                backgroundColor: [
+                  '#ff2b25', '#f15a25', '#f8931f', '#ffb83c', '#ff6364'
+                ],
+                label: 'Category-wise Distribution'
+              }],
+              labels: {{ labels2|safe }}
+            },
+            options: {
+              responsive: true
+            }
+          };
+
+          window.onload = function() {
+            var ctx = document.getElementById('donut-chart').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+              var ctx1 = document.getElementById('donut-chart-annual').getContext('2d');
+              window.myPie = new Chart(ctx1, config1);
+      
+            };
+
+        </script>
+      </div>
+    </div>
+  </div>
+
+        <div id="categories-section">
+        <h2 class="section-title mb-3" style="color: white; text-shadow: 2px 2px #474747;">Categories</h2>
+          <div class="card-grid" style="margin-bottom: 300px;">
+            {% for category in categories %}
+              <div class="card">
+                <div class="card-container">
+                  <h4><b>{{ category.name }}</b></h4>
+                  <h4>{{ category.amt }}</h4>
+                  {% for subcategory in category.sub_category.all %}
+                  <p>{{ subcategory.name }} : {{ subcategory.amt }}</p>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="month-section" style="padding-top: 20px;">
+          <h2 class="section-title mb-3" style="color: white; text-shadow: 2px 2px #474747;">Monthly Balance</h2>
+          <div class="card-grid"  style="margin-bottom: 100px;">
+          {% for month in months %}
+            <div class="card">
+              <div class="card-container">
+                <h4><b>{{ month.name  }}</b></h4>
+                <p>Monthly Income : {{ month.monthly_income }}</p>
+                <p>Monthly Expenditure : {{ month.monthly_expenditure }}</p>
+              </div>
+            </div>
+          {% endfor %}
+          </div>    
+        </div>
+
+        <div id="year-section">
+          <h2 class="section-title mb-3" style="color: white; text-shadow: 2px 2px #474747;">Annual Balance</h2>
+          <div class="year">
+            <div class="card-grid-year" >
+            {% for year in years %}
+              <div class="card">
+                <div class="card-container-annual">
+                  <h4><b>{{ year.name  }}</b></h4>
+                  <p>Annual Income : {{ year.annual_income }}</p>
+                  <p>Annual Expenditure : {{ year.annual_expenditure }}</p>
+                </div>
+              </div>
+            {% endfor %}
+            </div>    
+          
+          <div class="graph">
+            <div class="graph-container">
+            <h3 class="section-sub-title">Annual Graph</h3>
+            <div id="graph-chart" style="width: 100%;">
+              <canvas id="donut-chart-annual"></canvas>
+            </div>
+        
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+            <script>
+              var config1 = {
+                type: 'doughnut',
+                data: {
+                  datasets: [{
+                    data: {{ data1|safe }},
+                    backgroundColor: [
+                      '#00a875', '#fcbf0f', '#0072bb', '#f15a23'
+                    ],
+                    label: 'Category-wise Distribution'
+                  }],
+                  labels: {{ labels1|safe }}
+                },
+                options: {
+                  responsive: true
+                }
+              };
+            </script>
+            </div>
+          </div>
+        </div>
+
+      </div>            
+    </div>
+
+  </div>
+
+
+</body>
+</html>

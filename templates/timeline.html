@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<title>Timeline</title>  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'timeline1/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'timeline1/css/animate.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'timeline1/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'timeline1/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'timeline1/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'timeline1/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'timeline1/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'timeline1/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'timeline1/css/jquery.timepicker.css' %}">
+
+    
+    <link rel="stylesheet" href="{% static 'timeline1/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'timeline1/css/icomoon.css' %}">
+	<link rel="stylesheet" href="{% static 'timeline1/css/style.css' %}">
+
+	<link href="https://fonts.googleapis.com/css?family=Dosis:300.400.700" rel="stylesheet"/>
+	<link rel="stylesheet" href="{% static 'budget/css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}">
+
+  </head>
+  
+<body overflow="hidden" style="background-image: url('{% static 'images/timeline_img.jpg' %}'); background-size: cover;" data-aos="fade">
+	<div class="bg">&nbsp;</div>
+	<div class="parent">
+		<div class="side-bar" style="background-color: rgba(250, 252, 248, 0.67);">
+			<ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="padding-top: 10px;">
+				<li><a href="{% url 'expense:timeline' %}" class="nav-link">All Expenditure</a></li>
+				<li><a href="{% url 'expense:post_create' %}" class="nav-link">Add Expenditure</a></li>
+				<li><a href="{% url 'expense:analytics' %}" class="nav-link">Analytics</a></li>
+                <li><a href="{% url 'expense:budget' %}" class="nav-link">Budget</a></li>
+				<li><a href="{% url 'expense:calendarToday' %}" class="nav-link">Calendar</a></li>
+				<li><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+
+            </ul>
+		</div>
+
+		<div class="container" overflow-y:scroll>
+		<div class="page-title"><h1><strong>TIMELINE</strong></h1></div>
+		
+		<div class="single-card-container-search">
+			<form method="GET" action="">
+				<input type="text" class='search-text'name="q" placeholder=" " value="{{ request.GET.q }}"/>
+				<input type="submit" class='card-button' style="background-color: orange !important;" value="search"/>
+			</form>
+		</div>
+
+		<div class id="expenditures-section">
+			<h2 class="section-title mb-3" style="color: white; text-shadow: 2px 2px #474747;">Expenditures </h2>
+			{% for obj in object_list %}
+				<div class="card">
+					<div class="single-card-container-timeline">
+						<span class="time">{{ obj.timestamp|timesince }} ago</span>  
+						<h4><b><a href='{{ obj.get_absolute_url }}'>{{ obj.sub_category }}</a></b></h4>
+						<p><b>{{ obj.spent }}</b></p>
+						<a class="btn btn-black mr-1 rounded-0" href="{{ obj.get_absolute_url }}"><b>View</b></a>
+						<a class="btn btn-black mr-1 rounded-0" href="{% url 'expense:post_update' id=obj.id %}"><b>Update</b></a>
+						<a class="btn btn-black mr-1 rounded-0" href="{% url 'expense:post_delete' id=obj.id %}"><b>Delete</b></a>
+
+					</div>
+				</div>
+			{% endfor %}
+		</div> 
+		<div class="pagination">
+			<span class="step-links">
+				{% if object_list.has_previous %}
+
+					<a class="btn btn-black mr-1 rounded-0" href="?{{ page_request_var }}=1"><b>First</b></a>
+					<a class="btn btn-black btn-outline-black ml-1 rounded-0" href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><b>Previous</b></a>
+				{% endif %}				
+				{% if object_list.has_next %}
+					<a class="btn btn-black mr-1 rounded-0" href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><b>Next</b></a>
+					<a class="btn btn-black btn-outline-black ml-1 rounded-0" href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}"><b>Last</b></a>
+				{% endif %}
+				<h3 class="section-sub-title-w">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</h3>
+			</span>
+		</div>
+	</div>
+	
+
+</div>
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+  <script src="{% static 'timeline1/js/script.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/popper.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/popper.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/aos.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'timeline1/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'timeline1/js/scrollax.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{% static 'timeline1/js/google-map.js' %}"></script>
+  <script src="{% static 'timeline1/js/main.js' %}"></script>
+    
+  </body>
+</html>
