@@ -129,7 +129,7 @@ tbody td:active {
     font-size: 1.2em;
     top: 0.5em;
     color: #fff;
-    background: #fbd05e;
+    background: black;
     cursor: pointer;
     font-family: "Montserrat","sans-serif";
     padding: 0.25em 0.5em;
@@ -358,7 +358,7 @@ input[type="date"],.key{
 }
 
 .none {
-    color: #c9c9c9;
+    color: #474747;
     padding: 3em 1em;
     text-align: center;
 }
