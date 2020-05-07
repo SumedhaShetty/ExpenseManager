@@ -20,7 +20,7 @@ An app to track, manage and analyse your expenses.
 
 ## Overview
 <p align="center">
-<img style="margin:1em" src="https://github.com/SumedhaShetty/ExpenseManager/tree/master/static/images/readme_gif.gif" width="100%"/>
+<img style="margin:1em" src="https://github.com/SumedhaShetty/ExpenseManager/blob/master/static/images/readme_gif.gif?raw=true" width="100%"/>
 </p>
 
 ### Pages
